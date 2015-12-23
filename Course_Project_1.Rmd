@@ -20,12 +20,13 @@ sample_size <- 40
 rate <- 0.2
 ```
 
-The theoretical mean and standard deviation for the exponential distribution used are presented below:
+The theoretical mean, standard deviation and variance for the exponential distribution used are presented below:
 ```{r}
 theo_mean <- 1/rate
 theo_sd <- 1/rate
+theo_var <- theo_sd^2
 ```
-Theoretical Mean: `r theo_mean` ; Theoretical Standard Deviation: `r theo_sd`
+Theoretical Mean: `r theo_mean` ; Theoretical Standard Deviation: `r theo_sd`; Theoretical Variance: `r theo_var`
 
 Before we begin with our simulations lets see how does a sample picked from the expoential distribution look like.
 ```{r echo=FALSE, fig.height=3}
@@ -42,32 +43,34 @@ As expected this looks like an exponetial distribution. Ofcourse!
 Let us start with the simulations now. We pick a sample of 40 exponetials and calculate their mean and standard deviation. This will be repeated a 1000 times.
 ```{r}
 df <- data.frame(means=double(),
-                 sds=double(),
-                 means_norm=double())
+                 means_norm=double(),
+                 std_dev=double(),
+                 variance=double())
 for(i in 1:nosim){
   x <- rexp(sample_size, rate = rate)
   df[i,1] <- mean(x)
-  df[i,2] <- sd(x)
-  df[i,3] <- ((mean(x)-theo_mean)/(theo_sd/sqrt(sample_size)))
+  df[i,2] <- ((mean(x)-theo_mean)/(theo_sd/sqrt(sample_size)))
+  df[i,3] <- sd(x)
+  df[i,4] <- df[i,3]^2
 }
 ```
 
-Let us see how does the sample means and standard deviations compare against the theoretical mean and standard deviation of the population.
+Let us see how does the sample means and variance compare against the theoretical mean and standard deviation of the population.
 ```{r echo=FALSE, fig.height=3, fig.width=8}
 g1 <- ggplot(df, aes(x = means)) 
 g1 <- g1 + geom_histogram(alpha = .20, binwidth=.3, colour = "black", aes(y = ..density..))
 g1 <- g1 + geom_vline(xintercept=theo_mean)
 g1 <- g1 + ggtitle("Plot#2 Sample and Theoretical Means")
-g2 <- ggplot(df, aes(x = sds)) 
+g2 <- ggplot(df, aes(x = variance)) 
 g2 <- g2 + geom_histogram(alpha = .20, binwidth=.3, colour = "black", aes(y = ..density..))
-g2 <- g2 + geom_vline(xintercept=theo_sd)
-g2 <- g2 + ggtitle("Plot#3 Sample and Theoretical Std. Deviations")
+g2 <- g2 + geom_vline(xintercept=theo_var)
+g2 <- g2 + ggtitle("Plot#3 Sample and Theoretical Variance")
 pushViewport(viewport(layout = grid.layout(1, 2)))
 print(g1, vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
 print(g2, vp = viewport(layout.pos.row = 1, layout.pos.col = 2))
 ```
 
-As expected the distribution of sample means and standard deviations is centered around its theroretical poulation mean and standard deviation respectively.
+As expected the distribution of sample means and standard deviations is centered around its theroretical poulation mean and variance respectively shown by veritcal lines.
 
 Let us now see how does the means and normalised means of samples behave. We expect this to be normal distribution for means and standard normal distribution for normalised means.
 ```{r echo=FALSE, fig.height=3, fig.width=8}
