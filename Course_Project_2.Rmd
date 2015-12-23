@@ -1,0 +1,59 @@
+---
+title: "Analysis of the ToothGrowth Data in R"
+author: "Kumar Chandrakant"
+date: "December 23, 2015"
+output: html_document
+---
+##Synopsis
+Through this snalysis we want to establish patterns in the data set ToothGrowth available in R. We would be using hypothesis testing and confidence intervals to establish this.
+
+##Exploratory Analysis
+Let us begin by loading the data set into session.
+```{r}
+library(plyr)
+data(ToothGrowth)
+```
+
+Let us now explore this dataset through str function.
+```{r}
+str(ToothGrowth)
+```
+We can see that this is a data frame consisting of 60 observations and 3 variables. The variable supp has two values "OJ" and "VC". The variable dose has three values 0.5, 1.0 and 2.0. The variable len provides the tooth growth for the supp and dose combination.
+
+We would now summarise the data set to yield the mean, standard deviation and sample size for every combination of supp and dose variables. We would use the ddply function in R.
+```{r}
+data <- ddply(ToothGrowth, c("supp", "dose"), summarise, 
+              mean = mean(len), sd = sd(len), count=length(len))
+```
+
+Let us look at the summarised data now.
+```{r}
+data
+```
+
+##Statistical Inference
+Before we get onto the statistical inference of this data set, let us postulate some key assumptions of the analysis:
+
+- Populations from where sample have been drawn have the same variance.
+- Populations from where sample have been drawn are normally distributed.
+- Each value is sampled independently from each other value.
+- The values in samples does not contain any outliers
+
+Let us perform the two sample t test for all the doses 0.5, 1.0 and 2.0 to see if the difference in mean is significant to conclude anything. The details of the test are as following:
+
+- Null hypothesis: True difference in means is equal to 0
+- Alternate hypothesis: True difference in means is not equal to 0
+- Significance level of 5%, i.e. 0.05.  
+```{r}
+t.test(subset(ToothGrowth, supp=="OJ" & dose==0.5)$len, 
+       subset(ToothGrowth, supp=="VC" & dose==0.5)$len, var.equal=T)
+t.test(subset(ToothGrowth, supp=="OJ" & dose==1.0)$len, 
+       subset(ToothGrowth, supp=="VC" & dose==1.0)$len, var.equal=T)
+t.test(subset(ToothGrowth, supp=="OJ" & dose==2.0)$len, 
+       subset(ToothGrowth, supp=="VC" & dose==2.0)$len, var.equal=T)
+```
+
+##Conclusions
+-Since the t-statistic of the tests for doses 0.5 and 1.0 have come below the significance level we can conclude that the null hypothesis is incorrect. Hence for these doses supp "OJ" performs better than "VC". However the t-statistic in case of dose 2.0 comes out to be more than the significance level and hence we can conclude that the null hypothesis is true which says that the performance of both supp "OJ" and "VC" are similar for dose 2.0.
+
+-The same conclusion can be drawn based on the confidence intervals calculated above. The first two tests for doses 0.5 and 1.0 have lower and upper confidence intervals above zero which shows that the population means are indeed different at 95% confidence. However the upper and lower confidence intervals of the third tests for dose 2.0 contains zero suggesting that the populations means can be similar.
