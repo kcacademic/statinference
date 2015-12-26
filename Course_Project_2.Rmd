@@ -32,6 +32,7 @@ data
 ```
 
 ##Statistical Inference
+###Assumptions
 Before we get onto the statistical inference of this data set, let us postulate some key assumptions of the analysis:
 
 - Populations from where sample have been drawn have the same variance.
@@ -39,7 +40,8 @@ Before we get onto the statistical inference of this data set, let us postulate 
 - Each value is sampled independently from each other value.
 - The values in samples does not contain any outliers
 
-Let us perform the two sample t test for all the doses 0.5, 1.0 and 2.0 to see if the difference in mean is significant to conclude anything. The details of the test are as following:
+###Hypothesis Testing
+Let us perform the two sample t-test for all the doses 0.5, 1.0 and 2.0 to see if the difference in mean is significant to conclude anything. The details of the test are as following:
 
 - Null hypothesis: True difference in means is equal to 0
 - Alternate hypothesis: True difference in means is not equal to 0
@@ -53,7 +55,7 @@ t.test(subset(ToothGrowth, supp=="OJ" & dose==2.0)$len,
        subset(ToothGrowth, supp=="VC" & dose==2.0)$len, var.equal=T)
 ```
 
-##Conclusions
+###Conclusions
 - Since the t-statistic of the tests for doses 0.5 and 1.0 have come below the significance level we can conclude that the null hypothesis is incorrect. Hence for these doses supp "OJ" performs better than "VC". However the t-statistic in case of dose 2.0 comes out to be more than the significance level and hence we can conclude that the null hypothesis is true which says that the performance of both supp "OJ" and "VC" are similar for dose 2.0.
 
 - The same conclusion can be drawn based on the confidence intervals calculated above. The first two tests for doses 0.5 and 1.0 have lower and upper confidence intervals above zero which shows that the population means are indeed different at 95% confidence. However the upper and lower confidence intervals of the third tests for dose 2.0 contains zero suggesting that the populations means can be similar.

@@ -6,11 +6,13 @@ output: html_document
 ---
 
 ##Overview
-Through this analysis we want to validate the Central Limit Theorem using a population which is exponentially distributed. As par the CLT irrespective of the distribution of underlaying population the distribution of means of sample drawn from it is normal. This obviously given that the variable is independent random and sample size is large enough. 
+Through this analysis we want to validate the Central Limit Theorem using a population which is exponentially distributed. As par the CLT irrespective of the distribution of underlaying population the distribution of means of sample drawn from it is normal. This obviously given that the variable is independent random and sample size is large enough.
 
 We will be running a 1000 simulations on sample size of 40 drawn from an exponential distribution with rate as 0.2.
 
-##Simulation
+******
+
+##Simulations
 Let us start by setting some of the basic parameters for the analysis like number of simulations that we would be running, sample size choosen and the rate of exponential distribution.
 ```{r}
 library(ggplot2)
@@ -26,7 +28,9 @@ theo_mean <- 1/rate
 theo_sd <- 1/rate
 theo_var <- theo_sd^2
 ```
-Theoretical Mean: `r theo_mean` ; Theoretical Standard Deviation: `r theo_sd`; Theoretical Variance: `r theo_var`
+- Theoretical Mean: `r theo_mean`
+- Theoretical Standard Deviation: `r theo_sd`
+- Theoretical Variance: `r theo_var`
 
 Before we begin with our simulations lets see how does a sample picked from the expoential distribution look like.
 ```{r echo=FALSE, fig.height=3}
@@ -55,6 +59,9 @@ for(i in 1:nosim){
 }
 ```
 
+******
+
+##Sample Mean  & Variance versus Theoretical Mean & Variance
 Let us see how does the sample means and variance compare against the theoretical mean and standard deviation of the population.
 ```{r echo=FALSE, fig.height=3, fig.width=8}
 g1 <- ggplot(df, aes(x = means)) 
@@ -72,6 +79,9 @@ print(g2, vp = viewport(layout.pos.row = 1, layout.pos.col = 2))
 
 As expected the distribution of sample means and standard deviations is centered around its theroretical poulation mean and variance respectively shown by veritcal lines.
 
+******
+
+##Distribution
 Let us now see how does the means and normalised means of samples behave. We expect this to be normal distribution for means and standard normal distribution for normalised means.
 ```{r echo=FALSE, fig.height=3, fig.width=8}
 g1 <- ggplot(df, aes(x = means)) 
@@ -87,9 +97,12 @@ print(g1, vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
 print(g2, vp = viewport(layout.pos.row = 1, layout.pos.col = 2))
 ```
 
-##Conclusion
 As evident from the plot of sample means above the distribution is very similar to a normal distribution. Also the plot of normalised sample means is similar to a standard normal distribution. This holds true the much famous Central Limit Theorem!
 
+******
+******
+******
+******
 ******
 
 ##Annexure
